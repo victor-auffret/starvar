@@ -1,0 +1,23 @@
+{
+  "name": "starvar",
+  "version": "1.0.0",
+  "description": "mono variable global state with ACL for write",
+  "keywords": [
+    "starvar"
+  ],
+  "homepage": "https://github.com/victor-auffret/starvar#readme",
+  "bugs": {
+    "url": "https://github.com/victor-auffret/starvar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor-auffret/starvar.git"
+  },
+  "license": "MIT",
+  "author": "victor-auffret",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
