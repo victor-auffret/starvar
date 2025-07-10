@@ -16,7 +16,7 @@ export function defineStarVar<T>(name: string, val: T, pass: string[] = []): Res
   return { ok: false, error: "already_defined" } as None<typeof ALREADY_DEFINED>
 }
 
-export function useStarVar(pass: Pass) {
+export function useStarVarAccess(pass: Pass) {
   let mdp = extractPass(pass)
 
   return {

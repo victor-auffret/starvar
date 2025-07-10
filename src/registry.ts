@@ -1,16 +1,24 @@
 import { StarVar } from "./core"
-import { NOT_FOUND } from "./error";
+import { ALREADY_DEFINED, NOT_FOUND } from "./error";
+import { extractPass } from "./helper";
 import { IGetSystemName, None, Pass, Result, Some } from "./types"
 
 type Varname = string
-
 
 export class StarVarRegistry {
 
   static memory: Map<Varname, StarVar<any>> = new Map()
 
+  static register<T>(name: Varname, starvar: StarVar<T>): Result<StarVar<T>, typeof ALREADY_DEFINED> {
+    if (!StarVarRegistry.has(name)) {
+      StarVarRegistry.memory.set(name, starvar)
+      return { ok: true, value: starvar } as Some<StarVar<T>>
+    }
+    return { ok: false, error: ALREADY_DEFINED } as None<typeof ALREADY_DEFINED>
+  }
+
   static getAllByPass(pass: Pass): Map<Varname, StarVar<any>> {
-    let mdp = typeof pass === "string" ? pass : (pass as IGetSystemName<Varname>).getSystemName();
+    let mdp = extractPass(pass);
     let rep: Map<Varname, StarVar<any>> = new Map()
     StarVarRegistry.memory.forEach((val, name) => {
       if (val.canWrite(mdp)) {

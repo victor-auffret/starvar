@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { defineStarVar, useStarVar } from '../src/index'
+import { defineStarVar } from '../src/index'
 
 const NUMBER_VALUE = -7
 const BOOLEAN_VALUE = false;

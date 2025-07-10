@@ -12,8 +12,7 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
   }
 
   public canWrite(pass: Pass): boolean {
-    let password = extractPass(pass);
-    return this.#writeList.has(password as K)
+    return this.#writeList.has(extractPass(pass) as K)
   }
 
   public val(): T {
