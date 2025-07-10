@@ -1,3 +1,4 @@
+export type { IStarVar, IGetSystemName } from "./types";
 export { StarVar } from "./core";
-
-export { defineStarVar } from "./helper"
+export { StarVarRegistry } from "./registry";
+export { defineStarVar, useStarVar } from "./helper";
