@@ -1,8 +1,7 @@
-import { StarVar } from "./core.js"
-import { StarVarRegistry } from "./registry.js"
-import { None, Pass, Result, Some } from "./types.js"
-
-const ALREADY_DEFINED = "already_defined"
+import { StarVar } from "./core"
+import { ALREADY_DEFINED, NOT_FOUND } from "./error"
+import { StarVarRegistry } from "./registry"
+import { None, Pass, Result, Some } from "./types"
 
 export function extractPass<T extends string = string>(pass: Pass<T>) {
   return (typeof pass == "string") ? pass : pass.getSystemName() as T
@@ -21,11 +20,7 @@ export function useStarVar(pass: Pass) {
   let mdp = extractPass(pass)
 
   return {
-    get: (name: string) => {
-      if (StarVarRegistry.memory.has(name)) {
-        return StarVarRegistry.memory.get(name)
-      }
-    },
+    get: (name: string) => StarVarRegistry.get(name),
     set: () => {
       let all = StarVarRegistry.getAllByPass(mdp)
       let rep = {}
@@ -37,3 +32,22 @@ export function useStarVar(pass: Pass) {
   }
 }
 
+export function useStarVarReadOnly<T>() {
+  return {
+    get: (name: string): Result<StarVar<T>, typeof NOT_FOUND> => {
+      return StarVarRegistry.get<T>(name)
+    }
+  }
+}
+
+type optStarVarRegistry = { [var_name: string]: any }
+
+export function createStarVarRegistry(opt: optStarVarRegistry) {
+  return {}
+}
+/*
+const registry = createRegistry<{
+  hp: StarVar<number>;
+  mana: StarVar<number>;
+}>()
+*/

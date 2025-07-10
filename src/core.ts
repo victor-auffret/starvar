@@ -1,5 +1,5 @@
-import { extractPass } from "./helper.js";
-import { IReadonlyStarAccess, IStarVar, IWritableStarAccess, Pass } from "./types.js";
+import { extractPass } from "./helper";
+import { IReadonlyStarAccess, IStarVar, IWritableStarAccess, Pass } from "./types";
 
 class AbstractStarVar<T, K extends string> implements IStarVar<T> {
 

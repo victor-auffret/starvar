@@ -1,8 +1,9 @@
-import { StarVar } from "./core.js"
-import { IGetSystemName, None, Pass, Result, Some } from "./types.js"
+import { StarVar } from "./core"
+import { NOT_FOUND } from "./error";
+import { IGetSystemName, None, Pass, Result, Some } from "./types"
 
 type Varname = string
-const NOT_FOUND = "not_found"
+
 
 export class StarVarRegistry {
 
