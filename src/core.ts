@@ -1,4 +1,5 @@
-import { IGetSystemName, IReadonlyStarAccess, IStarVar, IWritableStarAccess, Pass } from "./types.js";
+import { extractPass } from "./helper.js";
+import { IReadonlyStarAccess, IStarVar, IWritableStarAccess, Pass } from "./types.js";
 
 class AbstractStarVar<T, K extends string> implements IStarVar<T> {
 
@@ -10,8 +11,8 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
     this.#writeList = new Set(writeList);
   }
 
-  public canWrite(pass: Pass<string>): boolean {
-    let password = typeof pass === "string" ? pass : (pass as IGetSystemName<string>).getSystemName();
+  public canWrite(pass: Pass): boolean {
+    let password = extractPass(pass);
     return this.#writeList.has(password as K)
   }
 
@@ -36,17 +37,17 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
 
 }
 
-class StarVar<T, K extends string> extends AbstractStarVar<T, K> {
+class StarVar<T, K extends string = string> extends AbstractStarVar<T, K> {
 
-  use(pass: Pass): IReadonlyStarAccess<T> | IWritableStarAccess<T> {
-    let rep: IReadonlyStarAccess<T> = {
-      get: () => this.val()
+  access(pass: Pass): IReadonlyStarAccess<T> | IWritableStarAccess<T> {
+    let base: IReadonlyStarAccess<T> = {
+      read: () => this.val()
     }
     if (this.canWrite(pass)) {
-      const set = (val: T | ((this: void, _: T) => T)) => this.set(val, pass)
-      rep = { ...rep, set } as IWritableStarAccess<T>
+      const write = (val: T | ((this: void, _: T) => T)) => this.set(val, pass)
+      return { ...base, write } as IWritableStarAccess<T>
     }
-    return rep
+    return base
   }
 }
 
