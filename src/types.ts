@@ -4,16 +4,16 @@ export interface IStarVar<T> {
   // set(val: T | ((this: void, _: T) => T), pass: string) : void;
 }
 
-export interface IGetSystemName {
-  getSystemName(): string
+export interface IGetSystemName<P extends string> {
+  getSystemName(): P & {}
 }
-export type Pass = string | IGetSystemName
+export type Pass<P extends string = string> = P | IGetSystemName<P>
 
-export interface IUseStarVar<T> {
+export interface IReadonlyStarAccess<T> {
   get(): T
 }
 
-export interface IUseStarVarSysOk<T> extends IUseStarVar<T> {
+export interface IWritableStarAccess<T> extends IReadonlyStarAccess<T> {
   set(val: T | ((this: void, _: T) => T)): void
 }
 

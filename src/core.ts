@@ -1,4 +1,4 @@
-import { IGetSystemName, IStarVar, IUseStarVar, IUseStarVarSysOk, Pass } from "./types.js";
+import { IGetSystemName, IReadonlyStarAccess, IStarVar, IWritableStarAccess, Pass } from "./types.js";
 
 class AbstractStarVar<T, K extends string> implements IStarVar<T> {
 
@@ -10,8 +10,8 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
     this.#writeList = new Set(writeList);
   }
 
-  public canWrite(pass: Pass): boolean {
-    let password = typeof pass === "string" ? pass : (pass as IGetSystemName).getSystemName();
+  public canWrite(pass: Pass<string>): boolean {
+    let password = typeof pass === "string" ? pass : (pass as IGetSystemName<string>).getSystemName();
     return this.#writeList.has(password as K)
   }
 
@@ -19,7 +19,7 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
     return this.#value;
   }
 
-  protected set(val: T | ((this: void, _: T) => T), pass: Pass): void {
+  protected set(val: T | ((this: void, _: T) => T), pass: Pass<string>): void {
     if (this.canWrite(pass)) {
       this.privateSet(val);
     }
@@ -38,13 +38,13 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
 
 class StarVar<T, K extends string> extends AbstractStarVar<T, K> {
 
-  use(pass: Pass): IUseStarVar<T> | IUseStarVarSysOk<T> {
-    let rep: IUseStarVar<T> = {
+  use(pass: Pass): IReadonlyStarAccess<T> | IWritableStarAccess<T> {
+    let rep: IReadonlyStarAccess<T> = {
       get: () => this.val()
     }
     if (this.canWrite(pass)) {
       const set = (val: T | ((this: void, _: T) => T)) => this.set(val, pass)
-      rep = { ...rep, set } as IUseStarVarSysOk<T>
+      rep = { ...rep, set } as IWritableStarAccess<T>
     }
     return rep
   }
