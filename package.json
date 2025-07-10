@@ -22,7 +22,8 @@
     "rebuild": "npm run clean && npm run build",
     "rebuild:bun": "bun run clean && bun run build",
     "rebuild:pnpm": "pnpm run clean && pnpm run build",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "test": "vitest"
   },
   "dependencies": {
     "@types/node": "^24.0.12",
