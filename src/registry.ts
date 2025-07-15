@@ -41,3 +41,51 @@ export class StarVarRegistry {
   }
 
 }
+
+interface IStarVarPrepared<T> {
+  val: T;
+  pass: Pass[];
+}
+
+interface IRegisterOptions {
+  [key: string]: IStarVarPrepared<any>;
+}
+
+interface IStarVarAccess {
+
+}
+
+interface IStarVarRegisterBuilder {
+  get: { [key: string]: () => any };
+  access: (pass: Pass) => {
+    get: { [key: string]: () => any },
+    set: { [key: string]: (old: any) => void }
+  }
+}
+/*
+interface IStarVarRegisterBuilder {
+  get: { [key: string]: () => any };
+  access: (pass: Pass) => {
+    return { 
+      set: {
+        [key: string]: () => void
+    }
+  }
+}
+*/
+
+export function makeVar<T>(val: T, pass: Pass[]): IStarVarPrepared<T> {
+  return { val, pass }
+}
+
+export function makeRegister(options: IRegisterOptions): IStarVarRegisterBuilder {
+  return {
+    get: {},
+    access: (pass: Pass) => {
+      return {
+        get: {},
+        set: {}
+      }
+    }
+  }
+}
