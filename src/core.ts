@@ -1,4 +1,4 @@
-import { extractPass } from "./helper";
+import { extractPass } from "./private-helper";
 import { IReadonlyStarAccess, IStarVar, IWritableStarAccess, Pass } from "./types";
 
 class AbstractStarVar<T, K extends string> implements IStarVar<T> {

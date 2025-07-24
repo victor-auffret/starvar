@@ -1,11 +1,8 @@
 import { StarVar } from "./core"
 import { ALREADY_DEFINED, NOT_FOUND } from "./error"
+import { extractPass } from "./private-helper"
 import { StarVarRegistry } from "./registry"
 import { None, Pass, Result, Some } from "./types"
-
-export function extractPass<T extends string = string>(pass: Pass<T>) {
-  return (typeof pass == "string") ? pass : pass.getSystemName() as T
-}
 
 export function defineStarVar<T>(name: string, val: T, pass: string[] = []): Result<StarVar<T>, typeof ALREADY_DEFINED> {
   if (!StarVarRegistry.memory.has(name)) {
@@ -13,7 +10,7 @@ export function defineStarVar<T>(name: string, val: T, pass: string[] = []): Res
     StarVarRegistry.memory.set(name, ultra)
     return { ok: true, value: ultra } as Some<StarVar<T>> 
   }
-  return { ok: false, error: "already_defined" } as None<typeof ALREADY_DEFINED>
+  return { ok: false, error: ALREADY_DEFINED } as None<typeof ALREADY_DEFINED>
 }
 
 export function useStarVarAccess(pass: Pass) {
@@ -45,9 +42,3 @@ type optStarVarRegistry = { [var_name: string]: any }
 export function createStarVarRegistry(opt: optStarVarRegistry) {
   return {}
 }
-/*
-const registry = createRegistry<{
-  hp: StarVar<number>;
-  mana: StarVar<number>;
-}>()
-*/

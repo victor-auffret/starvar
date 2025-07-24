@@ -1,6 +1,6 @@
 import { StarVar } from "./core"
 import { ALREADY_DEFINED, NOT_FOUND } from "./error";
-import { extractPass } from "./helper";
+import { extractPass } from "./private-helper";
 import { None, Pass, Result, Some } from "./types"
 
 type Varname = string
@@ -62,17 +62,6 @@ interface IStarVarRegisterBuilder {
     set: { [key: string]: (old: any) => void }
   }
 }
-/*
-interface IStarVarRegisterBuilder {
-  get: { [key: string]: () => any };
-  access: (pass: Pass) => {
-    return { 
-      set: {
-        [key: string]: () => void
-    }
-  }
-}
-*/
 
 export function makeVar<T>(val: T, pass: Pass[]): IStarVarPrepared<T> {
   return { val, pass }
