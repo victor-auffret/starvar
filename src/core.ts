@@ -19,13 +19,13 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
     return this.#value;
   }
 
-  protected set(val: T | ((this: void, _: T) => T), pass: Pass<string>): void {
+  protected set(val: ((this: void, _: T) => T) | T, pass: Pass<string>): void {
     if (this.canWrite(pass)) {
       this.privateSet(val);
     }
   }
 
-	private privateSet(val: T | ((this: void, _: T) => T)) {
+	private privateSet(val: ((this: void, _: T) => T) | T) {
 	if (typeof val === "function") {
 		const fn = val as (this: void, current: T) => T;
       this.#value = fn(this.#value);

@@ -1,7 +1,7 @@
 import { StarVar } from "./core"
 import { ALREADY_DEFINED, NOT_FOUND } from "./error";
 import { extractPass } from "./helper";
-import { IGetSystemName, None, Pass, Result, Some } from "./types"
+import { None, Pass, Result, Some } from "./types"
 
 type Varname = string
 
