@@ -1,7 +1,3 @@
-# starvar
-mono variable global state with ACL for write 
-
-
 # 🟡 StarVar
 
 **StarVar** est une librairie TypeScript minimaliste pour déclarer une **mono-variable globale typée**, avec un système de **contrôle d’accès via un token ou "pass" fonctionnant à l'aide d'une ACL**.  
