@@ -1,1 +1,1 @@
-export { defineStarVar, useStarVarAccess, useStarVarReadOnly } from "./helper";
+export { defineStarVar, useStarVarAccess, useStarVarReadOnly } from "./starvar";
