@@ -1,3 +1,13 @@
+
+export type Some<T> = { ok: true, value: T }
+export type None<Err extends string = string> = { ok: false, error: Err }
+export type Result<T, Err extends string = string> = Some<T> | None<Err>
+
+export const NOT_FOUND = "not_found"
+export const ALREADY_DEFINED = "already_defined"
+
+type SetterParam<Val> = Val | ((this: void, _: Val) => Val)
+
 export interface IStarVar<T> {
   canWrite(pass: string): boolean;
   val(): T;
@@ -17,44 +27,37 @@ export interface IWritableStarAccess<T> extends IReadonlyStarAccess<T> {
   write(val: T | ((this: void, _: T) => T)): void
 }
 
-export type Some<T> = { ok: true, value: T }
-export type None<Err extends string = string> = { ok: false, error: Err }
-export type Result<T, Err extends string = string> = Some<T> | None<Err>
-
-export const NOT_FOUND = "not_found"
-export const ALREADY_DEFINED = "already_defined"
-
 export function extractPass<T extends string = string>(pass: Pass<T>) {
   return (typeof pass == "string") ? pass : pass.getSystemName() as T
 }
 
-class AbstractStarVar<T, K extends string> implements IStarVar<T> {
+class AbstractStarVar<Val, Sys extends string> implements IStarVar<Val> {
 
-  #value: T;
-  #writeList: Set<K>;
+  #value: Val;
+  #writeList: Set<Sys>;
 
-  constructor(value: T, writeList: K[] = []) {
+  constructor(value: Val, writeList: Sys[] = []) {
     this.#value = value;
     this.#writeList = new Set(writeList);
   }
 
   public canWrite(pass: Pass): boolean {
-    return this.#writeList.has(extractPass(pass) as K)
+    return this.#writeList.has(extractPass(pass) as Sys)
   }
 
-  public val(): T {
+  public val(): Val {
     return this.#value;
   }
 
-  protected set(val: ((this: void, _: T) => T) | T, pass: Pass<string>): void {
+  protected set(val: ((this: void, _: Val) => Val) | Val, pass: Pass<string>): void {
     if (this.canWrite(pass)) {
       this.privateSet(val);
     }
   }
 
-  private privateSet(val: ((this: void, _: T) => T) | T) {
+  private privateSet(val: ((this: void, _: Val) => Val) | Val) {
   if (typeof val === "function") {
-    const fn = val as (this: void, current: T) => T;
+    const fn = val as (this: void, current: Val) => Val;
       this.#value = fn(this.#value);
     } else {
       this.#value = val;
@@ -63,22 +66,22 @@ class AbstractStarVar<T, K extends string> implements IStarVar<T> {
 
 }
 
-export class StarVar<T, K extends string = string> extends AbstractStarVar<T, K> {
+export class StarVar<Val, Sys extends string = string> extends AbstractStarVar<Val, Sys> {
 
-  access(pass: Pass): IReadonlyStarAccess<T> | IWritableStarAccess<T> {
-    let base: IReadonlyStarAccess<T> = {
+  access(pass: Pass): IReadonlyStarAccess<Val> | IWritableStarAccess<Val> {
+    let base: IReadonlyStarAccess<Val> = {
       read: () => this.val()
     }
     if (this.canWrite(pass)) {
-      const write = (val: T | ((this: void, _: T) => T)) => this.set(val, pass)
-      return { ...base, write } as IWritableStarAccess<T>
+      const write = (val: Val | ((this: void, _: Val) => Val)) => this.set(val, pass)
+      return { ...base, write } as IWritableStarAccess<Val>
     }
     return base
   }
 }
 
 //////////////////////////
-
+/*
 type Varname = string
 
 export class StarVarRegistry {
@@ -223,3 +226,4 @@ export const makeStarVarRegistry = function (vars: StarVarConfig): StarVarRegist
     }
   }
 }
+*/

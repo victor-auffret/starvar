@@ -1,6 +1,13 @@
 import { expect, test } from 'vitest'
-import { defineStarVar } from '../src/index'
+import { /*defineStarVar,*/ StarVar } from '../src/starvar'
 
+
+test("StarVar test", () => {
+  let v = new StarVar(5, ["sys:yes"])
+  expect(v.val()).toBe(5)
+})
+
+/*
 // Table de configuration pour les tests simples de valeur
 const valueCases = [
   { name: "NUMBER_VALUE", value: -7 },
@@ -54,3 +61,4 @@ writeAccessCases.forEach(({ name, value, allowed, checks }, index) => {
     }
   });
 });
+*/
